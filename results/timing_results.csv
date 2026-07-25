@@ -1,0 +1,3 @@
+Query,Database,Time_ms,Results
+Query1_HighHop,PostgreSQL,78.715,0
+Query1_HighHop,Neo4j,468,0
