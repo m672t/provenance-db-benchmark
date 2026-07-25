@@ -1,0 +1,1 @@
+docker exec -i dbs_postgres psql -U postgres -d postgres < postgres/create_tables.sql
