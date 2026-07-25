@@ -1,0 +1,1 @@
+cat neo4j/create_schema.cypher | docker exec -i dbs_neo4j cypher-shell -u neo4j -p 4570176501
