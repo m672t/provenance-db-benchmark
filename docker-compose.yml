@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: dbs_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "4570176501"
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  neo4j:
+    image: neo4j:5
+    container_name: dbs_neo4j
+    environment:
+      NEO4J_AUTH: neo4j/4570176501
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    restart: unless-stopped
+    volumes:
+      - neo4j_data:/data
+
+volumes:
+  postgres_data:
+  neo4j_data:
