@@ -1,0 +1,36 @@
+PostgreSQL warm-up...
+PostgreSQL run 1: 274.501 ms, 63,018 rows
+PostgreSQL run 2: 284.974 ms, 63,018 rows
+PostgreSQL run 3: 275.868 ms, 63,018 rows
+PostgreSQL run 4: 273.799 ms, 63,018 rows
+PostgreSQL run 5: 275.145 ms, 63,018 rows
+PostgreSQL run 6: 271.300 ms, 63,018 rows
+PostgreSQL run 7: 266.912 ms, 63,018 rows
+Neo4j warm-up...
+Neo4j run 1: 1044.427 ms, 63,018 rows
+Neo4j run 2: 1034.224 ms, 63,018 rows
+Neo4j run 3: 1048.066 ms, 63,018 rows
+Neo4j run 4: 1043.891 ms, 63,018 rows
+Neo4j run 5: 1079.231 ms, 63,018 rows
+Neo4j run 6: 1049.478 ms, 63,018 rows
+Neo4j run 7: 1055.523 ms, 63,018 rows
+
+PostgreSQL summary
+----------------------------------------
+Runs:       7
+Rows:       {63018}
+Minimum:    266.912 ms
+Maximum:    284.974 ms
+Mean:       274.643 ms
+Median:     274.501 ms
+Std. dev.:  5.480 ms
+
+Neo4j summary
+----------------------------------------
+Runs:       7
+Rows:       {63018}
+Minimum:    1034.224 ms
+Maximum:    1079.231 ms
+Mean:       1050.691 ms
+Median:     1048.066 ms
+Std. dev.:  14.159 ms

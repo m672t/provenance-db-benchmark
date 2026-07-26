@@ -1,0 +1,8 @@
+database,state,run,elapsed_ms,row_count
+postgres,raw,1,283.728,63018
+postgres,raw,2,265.300,63018
+postgres,raw,3,264.811,63018
+postgres,raw,4,263.273,63018
+postgres,raw,5,264.426,63018
+postgres,raw,6,264.518,63018
+postgres,raw,7,264.498,63018
