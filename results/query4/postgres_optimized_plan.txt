@@ -1,78 +1,78 @@
                                                                                                                                                                                                    QUERY PLAN                                                                                                                                                                                                   
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- Sort  (cost=24092.38..24139.25 rows=18749 width=61) (actual time=288.777..291.960 rows=63018 loops=1)
+ Sort  (cost=24165.02..24211.58 rows=18627 width=61) (actual time=278.668..281.635 rows=63018 loops=1)
    Output: edge.dst, target.type, (count(DISTINCT edge.src)), (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_EXECUTE'::text))), (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_WRITE'::text))), ((((5 * (count(DISTINCT edge.src))) + (10 * (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_EXECUTE'::text))))) + (2 * (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_WRITE'::text))))))
    Sort Key: ((((5 * (count(DISTINCT edge.src))) + (10 * (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_EXECUTE'::text))))) + (2 * (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_WRITE'::text)))))) DESC, edge.dst
    Sort Method: external merge  Disk: 4624kB
-   Buffers: shared hit=11054, temp read=7487 written=7514
-   ->  Hash Join  (cost=21252.88..22761.71 rows=18749 width=61) (actual time=263.071..273.043 rows=63018 loops=1)
+   Buffers: shared hit=11054, temp read=7486 written=7513
+   ->  Hash Join  (cost=21336.58..22843.89 rows=18627 width=61) (actual time=252.127..262.383 rows=63018 loops=1)
          Output: edge.dst, target.type, (count(DISTINCT edge.src)), (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_EXECUTE'::text))), (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_WRITE'::text))), (((5 * (count(DISTINCT edge.src))) + (10 * (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_EXECUTE'::text))))) + (2 * (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_WRITE'::text)))))
          Inner Unique: true
          Hash Cond: (target.uuid = edge.dst)
-         Buffers: shared hit=11051, temp read=6909 written=6935
-         ->  Seq Scan on public.nodes target  (cost=0.00..1108.23 rows=63323 width=29) (actual time=0.002..1.968 rows=63323 loops=1)
+         Buffers: shared hit=11051, temp read=6908 written=6934
+         ->  Seq Scan on public.nodes target  (cost=0.00..1108.23 rows=63323 width=29) (actual time=0.002..1.994 rows=63323 loops=1)
                Output: target.uuid, target.type
                Buffers: shared hit=475
-         ->  Hash  (cost=21018.52..21018.52 rows=18749 width=40) (actual time=263.001..263.042 rows=63018 loops=1)
+         ->  Hash  (cost=21103.75..21103.75 rows=18627 width=40) (actual time=252.080..252.118 rows=63018 loops=1)
                Output: edge.dst, (count(DISTINCT edge.src)), (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_EXECUTE'::text))), (count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_WRITE'::text)))
                Buckets: 65536 (originally 32768)  Batches: 1 (originally 1)  Memory Usage: 4943kB
-               Buffers: shared hit=10576, temp read=6909 written=6935
-               ->  GroupAggregate  (cost=17187.95..20831.03 rows=18749 width=40) (actual time=76.084..257.360 rows=63018 loops=1)
+               Buffers: shared hit=10576, temp read=6908 written=6934
+               ->  GroupAggregate  (cost=17205.54..20917.48 rows=18627 width=40) (actual time=71.321..247.234 rows=63018 loops=1)
                      Output: edge.dst, count(DISTINCT edge.src), count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_EXECUTE'::text)), count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_WRITE'::text))
                      Group Key: edge.dst
-                     Buffers: shared hit=10576, temp read=6909 written=6935
-                     ->  Gather Merge  (cost=17187.95..20249.27 rows=26285 width=46) (actual time=76.072..151.141 rows=936677 loops=1)
+                     Buffers: shared hit=10576, temp read=6908 written=6934
+                     ->  Gather Merge  (cost=17205.54..20328.94 rows=26818 width=46) (actual time=71.311..143.967 rows=936677 loops=1)
                            Output: edge.dst, edge.src, edge.type
                            Workers Planned: 2
                            Workers Launched: 2
-                           Buffers: shared hit=10576, temp read=6446 written=6470
-                           ->  Sort  (cost=16187.92..16215.30 rows=10952 width=46) (actual time=74.733..92.115 rows=312226 loops=3)
+                           Buffers: shared hit=10576, temp read=6445 written=6469
+                           ->  Sort  (cost=16205.51..16233.45 rows=11174 width=46) (actual time=70.330..87.123 rows=312226 loops=3)
                                  Output: edge.dst, edge.src, edge.type
                                  Sort Key: edge.dst
-                                 Sort Method: external merge  Disk: 17280kB
-                                 Buffers: shared hit=10576, temp read=6446 written=6470
-                                 Worker 0:  actual time=74.097..91.138 rows=309868 loops=1
-                                   Sort Method: external merge  Disk: 17072kB
-                                   Buffers: shared hit=3521, temp read=2134 written=2142
-                                 Worker 1:  actual time=74.283..91.341 rows=312616 loops=1
-                                   Sort Method: external merge  Disk: 17216kB
-                                   Buffers: shared hit=3548, temp read=2152 written=2160
-                                 ->  Hash Join  (cost=101.73..15453.10 rows=10952 width=46) (actual time=0.320..38.745 rows=312226 loops=3)
+                                 Sort Method: external merge  Disk: 17600kB
+                                 Buffers: shared hit=10576, temp read=6445 written=6469
+                                 Worker 0:  actual time=69.919..87.830 rows=308963 loops=1
+                                   Sort Method: external merge  Disk: 17016kB
+                                   Buffers: shared hit=3511, temp read=2127 written=2135
+                                 Worker 1:  actual time=69.886..86.716 rows=307917 loops=1
+                                   Sort Method: external merge  Disk: 16944kB
+                                   Buffers: shared hit=3495, temp read=2118 written=2126
+                                 ->  Hash Join  (cost=102.80..15454.18 rows=11174 width=46) (actual time=0.244..37.353 rows=312226 loops=3)
                                        Output: edge.dst, edge.src, edge.type
                                        Inner Unique: true
                                        Hash Cond: (edge.src = source.uuid)
                                        Buffers: shared hit=10562
-                                       Worker 0:  actual time=0.301..38.504 rows=309868 loops=1
-                                         Buffers: shared hit=3514
-                                       Worker 1:  actual time=0.316..38.560 rows=312616 loops=1
-                                         Buffers: shared hit=3541
-                                       ->  Parallel Seq Scan on public.edges edge  (cost=0.00..14326.82 rows=390282 width=46) (actual time=0.005..11.181 rows=312226 loops=3)
+                                       Worker 0:  actual time=0.231..36.734 rows=308963 loops=1
+                                         Buffers: shared hit=3504
+                                       Worker 1:  actual time=0.237..36.898 rows=307917 loops=1
+                                         Buffers: shared hit=3488
+                                       ->  Parallel Seq Scan on public.edges edge  (cost=0.00..14326.82 rows=390282 width=46) (actual time=0.003..10.623 rows=312226 loops=3)
                                              Output: edge.id, edge.src, edge.dst, edge.type, edge.ts
                                              Buffers: shared hit=10424
-                                             Worker 0:  actual time=0.004..11.117 rows=309868 loops=1
-                                               Buffers: shared hit=3452
-                                             Worker 1:  actual time=0.007..11.171 rows=312616 loops=1
-                                               Buffers: shared hit=3479
-                                       ->  Hash  (cost=79.51..79.51 rows=1777 width=16) (actual time=0.288..0.289 rows=1790 loops=3)
+                                             Worker 0:  actual time=0.004..10.496 rows=308963 loops=1
+                                               Buffers: shared hit=3442
+                                             Worker 1:  actual time=0.003..10.529 rows=307917 loops=1
+                                               Buffers: shared hit=3426
+                                       ->  Hash  (cost=80.14..80.14 rows=1813 width=16) (actual time=0.219..0.220 rows=1790 loops=3)
                                              Output: source.uuid
                                              Buckets: 2048  Batches: 1  Memory Usage: 100kB
                                              Buffers: shared hit=44
-                                             Worker 0:  actual time=0.262..0.262 rows=1790 loops=1
+                                             Worker 0:  actual time=0.201..0.202 rows=1790 loops=1
                                                Buffers: shared hit=15
-                                             Worker 1:  actual time=0.273..0.273 rows=1790 loops=1
+                                             Worker 1:  actual time=0.202..0.202 rows=1790 loops=1
                                                Buffers: shared hit=15
-                                             ->  Index Only Scan using idx_q4_nodes_type_uuid on public.nodes source  (cost=0.41..79.51 rows=1777 width=16) (actual time=0.016..0.148 rows=1790 loops=3)
+                                             ->  Index Only Scan using idx_q4_nodes_type_uuid on public.nodes source  (cost=0.41..80.14 rows=1813 width=16) (actual time=0.012..0.108 rows=1790 loops=3)
                                                    Output: source.uuid
                                                    Index Cond: (source.type = 'SUBJECT_PROCESS'::text)
                                                    Heap Fetches: 0
                                                    Buffers: shared hit=44
-                                                   Worker 0:  actual time=0.015..0.128 rows=1790 loops=1
+                                                   Worker 0:  actual time=0.012..0.105 rows=1790 loops=1
                                                      Buffers: shared hit=15
-                                                   Worker 1:  actual time=0.016..0.130 rows=1790 loops=1
+                                                   Worker 1:  actual time=0.012..0.104 rows=1790 loops=1
                                                      Buffers: shared hit=15
  Planning:
-   Buffers: shared hit=218 read=1
- Planning Time: 0.670 ms
- Execution Time: 294.138 ms
+   Buffers: shared hit=200
+ Planning Time: 0.313 ms
+ Execution Time: 283.762 ms
 (74 rows)
 
