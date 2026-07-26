@@ -1,0 +1,8 @@
+database,state,run,elapsed_ms,row_count
+neo4j,indexed,1,1044.427,63018
+neo4j,indexed,2,1034.224,63018
+neo4j,indexed,3,1048.066,63018
+neo4j,indexed,4,1043.891,63018
+neo4j,indexed,5,1079.231,63018
+neo4j,indexed,6,1049.478,63018
+neo4j,indexed,7,1055.523,63018

@@ -1,0 +1,15 @@
+
+# Local dataset
+data.json
+theia-e3.json
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Full Query 4 result dumps; retained locally
+results/query4/*_results.txt

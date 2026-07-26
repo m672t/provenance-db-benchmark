@@ -1,0 +1,7 @@
+Query 4 result validation
+==================================================
+PostgreSQL rows: 63,018
+Neo4j rows:      63,018
+Exact match:     YES
+
+All rows, metric values, scores, and ordering match.

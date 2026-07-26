@@ -1,0 +1,8 @@
+database,state,run,elapsed_ms,row_count
+postgres,indexed,1,274.501,63018
+postgres,indexed,2,284.974,63018
+postgres,indexed,3,275.868,63018
+postgres,indexed,4,273.799,63018
+postgres,indexed,5,275.145,63018
+postgres,indexed,6,271.300,63018
+postgres,indexed,7,266.912,63018

@@ -1,0 +1,18 @@
+PostgreSQL warm-up...
+PostgreSQL run 1: 242.159 ms, 63,018 rows
+PostgreSQL run 2: 247.467 ms, 63,018 rows
+PostgreSQL run 3: 247.634 ms, 63,018 rows
+PostgreSQL run 4: 260.839 ms, 63,018 rows
+PostgreSQL run 5: 254.157 ms, 63,018 rows
+PostgreSQL run 6: 251.947 ms, 63,018 rows
+PostgreSQL run 7: 264.948 ms, 63,018 rows
+
+PostgreSQL optimized summary
+----------------------------------------
+Runs:       7
+Rows:       {63018}
+Minimum:    242.159 ms
+Maximum:    264.948 ms
+Mean:       252.736 ms
+Median:     251.947 ms
+Std. dev.:  7.991 ms

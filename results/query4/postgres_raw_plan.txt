@@ -1,0 +1,93 @@
+                                                                                                                                               QUERY PLAN                                                                                                                                                
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=26682.58..26749.55 rows=26788 width=61) (actual time=334.249..336.945 rows=63018 loops=1)
+   Output: threat_metrics.target_uuid, threat_metrics.target_type, threat_metrics.distinct_source_processes, threat_metrics.execute_count, threat_metrics.write_count, ((((5 * threat_metrics.distinct_source_processes) + (10 * threat_metrics.execute_count)) + (2 * threat_metrics.write_count)))
+   Sort Key: ((((5 * threat_metrics.distinct_source_processes) + (10 * threat_metrics.execute_count)) + (2 * threat_metrics.write_count))) DESC, threat_metrics.target_uuid
+   Sort Method: external merge  Disk: 4624kB
+   Buffers: shared hit=13443, temp read=9100 written=9130
+   ->  Subquery Scan on threat_metrics  (cost=20320.08..24712.42 rows=26788 width=61) (actual time=110.285..317.406 rows=63018 loops=1)
+         Output: threat_metrics.target_uuid, threat_metrics.target_type, threat_metrics.distinct_source_processes, threat_metrics.execute_count, threat_metrics.write_count, (((5 * threat_metrics.distinct_source_processes) + (10 * threat_metrics.execute_count)) + (2 * threat_metrics.write_count))
+         Buffers: shared hit=13440, temp read=8522 written=8551
+         ->  GroupAggregate  (cost=20320.08..24109.69 rows=26788 width=53) (actual time=110.284..312.899 rows=63018 loops=1)
+               Output: target.uuid, target.type, count(DISTINCT source.uuid), count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_EXECUTE'::text)), count(*) FILTER (WHERE ((edge.type)::text = 'EVENT_WRITE'::text))
+               Group Key: target.uuid
+               Buffers: shared hit=13440, temp read=8522 written=8551
+               ->  Gather Merge  (cost=20320.08..23439.99 rows=26788 width=59) (actual time=110.273..191.916 rows=936677 loops=1)
+                     Output: target.uuid, target.type, source.uuid, edge.type
+                     Workers Planned: 2
+                     Workers Launched: 2
+                     Buffers: shared hit=13440, temp read=8059 written=8086
+                     ->  Sort  (cost=19320.06..19347.96 rows=11162 width=59) (actual time=109.231..126.512 rows=312226 loops=3)
+                           Output: target.uuid, target.type, source.uuid, edge.type
+                           Sort Key: target.uuid
+                           Sort Method: external merge  Disk: 21760kB
+                           Buffers: shared hit=13440, temp read=8059 written=8086
+                           Worker 0:  actual time=108.819..125.637 rows=313974 loops=1
+                             Sort Method: external merge  Disk: 21616kB
+                             Buffers: shared hit=4532, temp read=2702 written=2711
+                           Worker 1:  actual time=108.761..125.765 rows=306581 loops=1
+                             Sort Method: external merge  Disk: 21096kB
+                             Buffers: shared hit=4444, temp read=2637 written=2646
+                           ->  Hash Join  (cost=3188.94..18569.62 rows=11162 width=59) (actual time=9.232..74.160 rows=312226 loops=3)
+                                 Output: target.uuid, target.type, source.uuid, edge.type
+                                 Inner Unique: true
+                                 Hash Cond: (edge.dst = target.uuid)
+                                 Buffers: shared hit=13368
+                                 Worker 0:  actual time=8.932..73.210 rows=313974 loops=1
+                                   Buffers: shared hit=4496
+                                 Worker 1:  actual time=8.822..74.221 rows=306581 loops=1
+                                   Buffers: shared hit=4408
+                                 ->  Hash Join  (cost=1289.17..16640.55 rows=11162 width=46) (actual time=1.953..39.424 rows=312226 loops=3)
+                                       Output: edge.type, edge.dst, source.uuid
+                                       Inner Unique: true
+                                       Hash Cond: (edge.src = source.uuid)
+                                       Buffers: shared hit=11849
+                                       Worker 0:  actual time=1.901..39.488 rows=313974 loops=1
+                                         Buffers: shared hit=3974
+                                       Worker 1:  actual time=1.966..38.660 rows=306581 loops=1
+                                         Buffers: shared hit=3886
+                                       ->  Parallel Seq Scan on public.edges edge  (cost=0.00..14326.82 rows=390282 width=46) (actual time=0.004..11.021 rows=312226 loops=3)
+                                             Output: edge.id, edge.src, edge.dst, edge.type, edge.ts
+                                             Buffers: shared hit=10424
+                                             Worker 0:  actual time=0.005..11.099 rows=313974 loops=1
+                                               Buffers: shared hit=3499
+                                             Worker 1:  actual time=0.004..10.777 rows=306581 loops=1
+                                               Buffers: shared hit=3411
+                                       ->  Hash  (cost=1266.54..1266.54 rows=1811 width=16) (actual time=1.942..1.942 rows=1790 loops=3)
+                                             Output: source.uuid
+                                             Buckets: 2048  Batches: 1  Memory Usage: 100kB
+                                             Buffers: shared hit=1425
+                                             Worker 0:  actual time=1.891..1.891 rows=1790 loops=1
+                                               Buffers: shared hit=475
+                                             Worker 1:  actual time=1.957..1.957 rows=1790 loops=1
+                                               Buffers: shared hit=475
+                                             ->  Seq Scan on public.nodes source  (cost=0.00..1266.54 rows=1811 width=16) (actual time=0.003..1.820 rows=1790 loops=3)
+                                                   Output: source.uuid
+                                                   Filter: ((source.type)::text = 'SUBJECT_PROCESS'::text)
+                                                   Rows Removed by Filter: 61533
+                                                   Buffers: shared hit=1425
+                                                   Worker 0:  actual time=0.003..1.770 rows=1790 loops=1
+                                                     Buffers: shared hit=475
+                                                   Worker 1:  actual time=0.003..1.841 rows=1790 loops=1
+                                                     Buffers: shared hit=475
+                                 ->  Hash  (cost=1108.23..1108.23 rows=63323 width=29) (actual time=7.171..7.172 rows=63323 loops=3)
+                                       Output: target.uuid, target.type
+                                       Buckets: 65536  Batches: 1  Memory Usage: 4332kB
+                                       Buffers: shared hit=1425
+                                       Worker 0:  actual time=6.924..6.924 rows=63323 loops=1
+                                         Buffers: shared hit=475
+                                       Worker 1:  actual time=6.739..6.740 rows=63323 loops=1
+                                         Buffers: shared hit=475
+                                       ->  Seq Scan on public.nodes target  (cost=0.00..1108.23 rows=63323 width=29) (actual time=0.004..2.477 rows=63323 loops=3)
+                                             Output: target.uuid, target.type
+                                             Buffers: shared hit=1425
+                                             Worker 0:  actual time=0.004..2.451 rows=63323 loops=1
+                                               Buffers: shared hit=475
+                                             Worker 1:  actual time=0.004..2.405 rows=63323 loops=1
+                                               Buffers: shared hit=475
+ Planning:
+   Buffers: shared hit=183
+ Planning Time: 0.369 ms
+ Execution Time: 339.096 ms
+(89 rows)
+
